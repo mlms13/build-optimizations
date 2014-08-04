@@ -1,0 +1,3 @@
+module.exports = {
+	content: "Squid whatever single-origin coffee, distillery church-key aesthetic gastropub. High Life tousled kogi skateboard, deep v cardigan Blue Bottle drinking vinegar retro selfies. Fanny pack wayfarers disrupt 90's. Wolf mixtape beard, aesthetic authentic ennui paleo. Chambray leggings art party 8-bit occupy Godard, artisan pour-over hoodie Schlitz Tumblr stumptown literally typewriter. XOXO crucifix Tumblr, cray Brooklyn kogi kale chips Odd Future Intelligentsia. Ugh VHS hashtag trust fund, bitters mumblecore locavore blog 3 wolf moon mlkshk master cleanse put a bird on it Blue Bottle."
+};
