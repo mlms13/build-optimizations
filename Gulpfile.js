@@ -1,7 +1,7 @@
 var gulp      = require('gulp'),
     rimraf    = require('gulp-rimraf');
-	source    = require('vinyl-source-stream'),
-	streamify = require('gulp-streamify');
+    source    = require('vinyl-source-stream'),
+    streamify = require('gulp-streamify');
 
 // cleaning tasks
 gulp.task('cleanjs', function () {
@@ -34,17 +34,17 @@ gulp.task('hint', function () {
 });
 
 gulp.task('js', ['cleanjs', 'hint'], function () {
-	var browserify = require('browserify'),
-		uglify     = require('gulp-uglify');
+    var browserify = require('browserify'),
+        uglify     = require('gulp-uglify');
 
-	return browserify('./js/main.js', {
-			transform: ['hbsfy'],
-			debug: true
-		})
-		.bundle()
-		.pipe(source('main.js'))
-		.pipe(streamify(uglify()))
-		.pipe(gulp.dest('./dist/js'));
+    return browserify('./js/main.js', {
+            transform: ['hbsfy'],
+            debug: true
+        })
+        .bundle()
+        .pipe(source('main.js'))
+        .pipe(streamify(uglify()))
+        .pipe(gulp.dest('./dist/js'));
 });
 
 // a task responsible for all compilation
