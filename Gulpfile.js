@@ -1,4 +1,5 @@
 var gulp      = require('gulp'),
+    gutil     = require('gulp-util'),
     rimraf    = require('gulp-rimraf');
     source    = require('vinyl-source-stream'),
     streamify = require('gulp-streamify');
@@ -52,8 +53,28 @@ gulp.task('build', ['stylus', 'js']);
 
 
 gulp.task('watch', ['build'], function () {
+    var watchify   = require('watchify'),
+        browserify = require('browserify'),
+        bundler    = watchify(browserify('./js/main.js', {
+            cache: {},
+            packageCache: {},
+            fullPaths: true,
+            transform: ['hbsfy'],
+            debug: true
+        }));
+
+    function rebundle() {
+        var t = Date.now();
+        gutil.log('Starting Watchify rebundle');
+        bundler.bundle()
+            .pipe(source('main.js'))
+            .pipe(gulp.dest('./dist'));
+        gutil.log('Finished rebundle after', gutil.colors.magenta(Date.now() - t + 'ms'));
+    }
+    bundler.on('update', rebundle);
     gulp.watch('./styl/**/*.styl', ['stylus']);
-    gulp.watch('./js/**/*.js', ['js']);
+
+    return rebundle();
 });
 
 gulp.task('default', ['build']);
