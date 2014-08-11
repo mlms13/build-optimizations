@@ -32,4 +32,13 @@ gulp.task('js', ['hint'], function () {
 		.pipe(gulp.dest('./dist/js'))
 });
 
-gulp.task('default', ['stylus', 'js']);
+// a task responsible for all compilation
+gulp.task('build', ['stylus', 'js']);
+
+
+gulp.task('watch', ['build'], function () {
+	gulp.watch('./styl/**/*.styl', ['stylus']);
+	gulp.watch('./js/**/*.js', ['js']);
+});
+
+gulp.task('default', ['build']);
