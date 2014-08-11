@@ -1,13 +1,25 @@
-var gulp = require('gulp');
+var gulp   = require('gulp'),
+    rimraf = require('gulp-rimraf');
 
-gulp.task('stylus', function () {
+// cleaning tasks
+gulp.task('cleanjs', function () {
+    gulp.src('./dist/js')
+        .pipe(rimraf());
+});
+
+gulp.task('cleancss', function () {
+    gulp.src('./dist/css')
+        .pipe(rimraf());
+});
+
+gulp.task('stylus', ['cleancss'], function () {
     var stylus = require('gulp-stylus'),
         prefix = require('gulp-autoprefixer');
 
     gulp.src('./styl/main.styl')
         .pipe(stylus({linenos: true}))
         .pipe(prefix())
-        .pipe(gulp.dest('./build/css'));
+        .pipe(gulp.dest('./dist/css'));
 });
 
 gulp.task('hint', function () {
@@ -19,7 +31,7 @@ gulp.task('hint', function () {
         .pipe(jshint.reporter(stylish));
 });
 
-gulp.task('js', ['hint'], function () {
+gulp.task('js', ['cleanjs', 'hint'], function () {
     var browserify = require('gulp-browserify'),
         uglify     = require('gulp-uglify');
 
