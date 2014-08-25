@@ -16,6 +16,7 @@
     "browserify": "^5.9.3",
     "gulp": "^3.8.7",
     "gulp-autoprefixer": "0.0.8",
+    "gulp-cached": "^1.0.1",
     "gulp-jshint": "^1.8.3",
     "gulp-rimraf": "^0.1.0",
     "gulp-streamify": "0.0.5",
