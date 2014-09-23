@@ -2,7 +2,17 @@ var gulp      = require('gulp'),
     gutil     = require('gulp-util'),
     rimraf    = require('gulp-rimraf');
     source    = require('vinyl-source-stream'),
-    streamify = require('gulp-streamify');
+    streamify = require('gulp-streamify'),
+    sequence  = require('run-sequence'),
+    
+    // check to see if a `--prod` flag was passed to gulp
+    prod      = gulp.env.prod;
+
+// toggle the production flag without passing an argument
+gulp.task('setProduction', function () {
+    // set the prod variable that we added above
+    prod = true;
+});
 
 // cleaning tasks
 gulp.task('cleanjs', function () {
@@ -17,11 +27,13 @@ gulp.task('cleancss', function () {
 
 gulp.task('stylus', ['cleancss'], function () {
     var stylus = require('gulp-stylus'),
-        prefix = require('gulp-autoprefixer');
+        prefix = require('gulp-autoprefixer'),
+        minify = require('gulp-minify-css');
 
     gulp.src('./styl/main.styl')
-        .pipe(stylus({linenos: true}))
+        .pipe(stylus({linenos: !prod}))
         .pipe(prefix())
+        .pipe(prod ? minify() : gutil.noop())
         .pipe(gulp.dest('./dist/css'));
 });
 
@@ -42,17 +54,23 @@ gulp.task('js', ['cleanjs', 'hint'], function () {
 
     return browserify('./js/main.js', {
             transform: ['hbsfy'],
-            debug: true
+            debug: !prod
         })
         .bundle()
         .pipe(source('main.js'))
-        .pipe(streamify(uglify()))
+        .pipe(prod ? streamify(uglify()) : gutil.noop())
         .pipe(gulp.dest('./dist/js'));
 });
 
 // a task responsible for all compilation
 gulp.task('build', ['stylus', 'js']);
 
+// add a task that always runs `build` in production mode
+gulp.task('prod', function () {
+    // use the run-sequence module to make sure
+    // `setProduction` happens before other tasks
+    sequence('setProduction', ['stylus', 'js'])
+});
 
 gulp.task('watch', ['stylus'], function () {
     var watchify   = require('watchify'),
