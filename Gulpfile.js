@@ -4,7 +4,7 @@ var gulp      = require('gulp'),
     source    = require('vinyl-source-stream'),
     streamify = require('gulp-streamify'),
     sequence  = require('run-sequence'),
-    
+
     // check to see if a `--prod` flag was passed to gulp
     prod      = gulp.env.prod;
 
@@ -54,7 +54,8 @@ gulp.task('js', ['cleanjs', 'hint'], function () {
 
     return browserify('./js/main.js', {
             transform: ['hbsfy'],
-            debug: !prod
+            debug: !prod,
+            noparse: ['jquery', 'lodash']
         })
         .bundle()
         .pipe(source('main.js'))
@@ -80,7 +81,8 @@ gulp.task('watch', ['stylus'], function () {
             packageCache: {},
             fullPaths: true,
             transform: ['hbsfy'],
-            debug: true
+            debug: true,
+            noparse: ['jquery', 'lodash']
         }));
 
     function rebundle() {
